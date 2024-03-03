@@ -42,9 +42,9 @@ public class NPC extends Entity{
     public void setAction()
     {
         if (onPath){
-            int goalCol = 36;
-            int goalRow = 21;
-
+            int goalRow = 22;
+            int goalCol = 37;
+            System.out.println("start the path");
             searchPath(goalCol,goalRow);
         }else {
             actionLockCounter++;
@@ -70,9 +70,8 @@ public class NPC extends Entity{
         }
     }
     public void speak() {
-
-        super.speak();
         onPath = true;
+        super.speak();
     }
 
 }

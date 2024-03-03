@@ -107,10 +107,10 @@ public class pathFinder {
              current.checked = true;
              openList.remove(current);
 
-             if (row-1>=0){
+             if (row-1 >= 0){
                  openNode(node[col][row-1]);
              }
-            if (col-1>=0){
+            if (col-1 >= 0){
                 openNode(node[col-1][row]);
             }
             if (row+1<gp.maxWorldRow){
@@ -149,10 +149,10 @@ public class pathFinder {
     }
 
     public void trackThePath() {
-        Node current = goal;
-        while (current!=start){
-            pathList.add(0,current);
-            current = current.parent;
+        Node curr = goal;
+        while (curr!=start){
+            pathList.add(0,curr);
+            curr = curr.parent;
         }
     }
 

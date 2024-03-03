@@ -465,32 +465,36 @@ public abstract class Entity {
                 if (leftX > nextX ){
                     direction = directions.left;
                 }
-                if (leftX < nextX ){
+                else if (leftX < nextX ){
                     direction = directions.right;
                 }
             } else if (topY > nextY && leftX > nextX) {
-                direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.left;
+                }else{
+                    direction = directions.up;
                 }
             }else if (topY > nextY && leftX < nextX) {
-                direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.right;
+                }else{
+                    direction = directions.up;
                 }
             }else if (topY < nextY && leftX > nextX) {
-                direction = directions.down;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.left;
+                }else{
+                    direction = directions.down;
                 }
             }else if (topY < nextY && leftX < nextX) {
-                direction = directions.down;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.right;
+                }else{
+                    direction = directions.down;
                 }
             }
             int nextCol = gp.pFinder.pathList.get(0).col;
@@ -499,7 +503,7 @@ public abstract class Entity {
                 onPath =false;
             }
         }else {
-            System.out.printf("nai");
+            System.out.println("nai");
         }
     }
 }
