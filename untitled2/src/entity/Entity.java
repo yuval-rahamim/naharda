@@ -68,7 +68,7 @@ public abstract class Entity {
     public int spriteCounter = 0;
     public int spriteNum =1;
 
-    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle solidArea = new Rectangle(0,0,40,40);
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX,solidAreaDefaultY;
     public boolean collisionOn = false;
@@ -452,41 +452,41 @@ public abstract class Entity {
             int nextX = gp.pFinder.pathList.get(0).col*gp.tileSize;
             int nextY = gp.pFinder.pathList.get(0).row*gp.tileSize;
 
-            int leftX = WorldX + solidArea.x;
-            int rightX = WorldX + solidArea.x+solidArea.width;
-            int topY = WorldY + solidArea.y;
-            int bottomY = WorldY + solidArea.y+solidArea.height;
+            int enLeftX = WorldX + solidArea.x;
+            int enRightX = WorldX + solidArea.x+solidArea.width;
+            int enTopY = WorldY + solidArea.y;
+            int enBottomY = WorldY + solidArea.y+solidArea.height;
 
-            if (topY > nextY && leftX >= nextX && rightX<nextX + gp.tileSize){
+            if (enTopY > nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.up;
-            }else if (topY < nextY && leftX >= nextX && rightX<nextX + gp.tileSize){
+            }else if (enTopY < nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.down;
-            } else if (topY >= nextY &&bottomY<nextY+gp.tileSize){
-                if (leftX > nextX ){
+            } else if (enTopY >= nextY && enBottomY <= nextY+gp.tileSize){
+                if (enLeftX > nextX ){
                     direction = directions.left;
                 }
-                if (leftX < nextX ){
+                if (enLeftX < nextX ){
                     direction = directions.right;
                 }
-            } else if (topY > nextY && leftX > nextX) {
+            } else if (enTopY > nextY && enLeftX > nextX) {
                 direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.left;
                 }
-            }else if (topY > nextY && leftX < nextX) {
+            }else if (enTopY > nextY && enLeftX < nextX) {
                 direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.right;
                 }
-            }else if (topY < nextY && leftX > nextX) {
+            }else if (enTopY < nextY && enLeftX > nextX) {
                 direction = directions.down;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.left;
                 }
-            }else if (topY < nextY && leftX < nextX) {
+            }else if (enTopY < nextY && enLeftX < nextX) {
                 direction = directions.down;
                 checkCollision();
                 if (collisionOn){
