@@ -33,12 +33,15 @@ public abstract class Entity {
     public Entity currentShield;
     public Projectile projectile;
     public Projectile projectile2;
+    public int defaultSpeed;
 
     public int value;
     public int attackValue;
     public int defenseValue;
     public int useCost;
+    public int knockBackPower = 0;
 
+    public boolean knockBack = false;
     public boolean invincible = false;
     public boolean attacking = false;
     public boolean alive = true;
@@ -47,6 +50,7 @@ public abstract class Entity {
     public int invincibleCounter = 0;
     public int dyingCounter = 0;
     int hpBarCounter = 0;
+    int knockBackCounter = 0;
 
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
@@ -176,25 +180,51 @@ public abstract class Entity {
     }
     public void update()
     {
-        setAction();
-        checkCollision();
-        if (!collisionOn)
-        {
-            switch (direction)
-            {
-                case up:
-                    WorldY -= speed;
-                    break;
-                case down:
-                    WorldY += speed;
-                    break;
-                case left:
-                    WorldX -= speed;
-                    break;
-                case right:
-                    WorldX += speed;
-                    break;
+        if (knockBack) {
+            checkCollision();
 
+            knockBackCounter++;
+            if (collisionOn || knockBackCounter == 10){
+                knockBackCounter =0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }else{
+                switch (gp.player.direction){
+                    case up:
+                        WorldY -= speed;
+                        break;
+                    case down:
+                        WorldY += speed;
+                        break;
+                    case left:
+                        WorldX -= speed;
+                        break;
+                    case right:
+                        WorldX += speed;
+                        break;
+                }
+            }
+        }else {
+            setAction();
+            checkCollision();
+
+            if (!collisionOn)
+            {
+                switch (direction)
+                {
+                    case up:
+                        WorldY -= speed;
+                        break;
+                    case down:
+                        WorldY += speed;
+                        break;
+                    case left:
+                        WorldX -= speed;
+                        break;
+                    case right:
+                        WorldX += speed;
+                        break;
+                }
             }
         }
 
@@ -493,14 +523,8 @@ public abstract class Entity {
                     direction = directions.right;
                 }
             }
-            //stop the search if reaches the goal
-//            int nextCol = gp.pFinder.pathList.get(0).col;
-//            int nextRow = gp.pFinder.pathList.get(0).row;
-//            if (nextCol == goalCol && nextRow == goalRow){
-//                onPath =false;
-//            }
         }else {
-            System.out.printf("nai");
+//            System.out.printf("there is no way");
         }
     }
 }

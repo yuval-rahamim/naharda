@@ -16,7 +16,8 @@ public class MON_Slime extends Entity {
         this.gp = gp;
         type = typeMonster;
         name = "Slime";
-        speed = 1;
+        defaultSpeed =1;
+        speed = defaultSpeed;
         imageChangeSpeed = 14;
         maxLife = 6;
         life = maxLife;
@@ -72,7 +73,12 @@ public class MON_Slime extends Entity {
             if (i>190 && !projectile.alive && shotAvailableCounter == 45)
             {
                 projectile.set(WorldX,WorldY,direction,true,this);
-                gp.projectileList.add(projectile);
+                for (int j =0; j< gp.projectile[1].length; j++) {
+                    if (gp.projectile[gp.currentMap][j]==null){
+                        gp.projectile[gp.currentMap][j] = projectile;
+                        break;
+                    }
+                }
                 shotAvailableCounter = 0;
             }
         }else {
