@@ -453,15 +453,15 @@ public abstract class Entity {
             int nextY = gp.pFinder.pathList.get(0).row*gp.tileSize;
 
             int enLeftX = WorldX + solidArea.x;
-            int enRightX = WorldX + solidArea.x+solidArea.width;
+            int enRightX = enLeftX+45; // solidArea.width אם אני רוצה שלכל דמות יהיה תזוזה יחודית אז
             int enTopY = WorldY + solidArea.y;
-            int enBottomY = WorldY + solidArea.y+solidArea.height;
+            int enBottomY = enTopY+45;// solidArea.height אם אני רוצה שלכל דמות יהיה תזוזה יחודית אז
 
             if (enTopY > nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.up;
             }else if (enTopY < nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.down;
-            } else if (enTopY >= nextY && enBottomY <= nextY+gp.tileSize){
+            } else if (enTopY >= nextY && enBottomY < nextY+gp.tileSize){
                 if (enLeftX > nextX ){
                     direction = directions.left;
                 }

@@ -16,6 +16,7 @@ public class TileManeger {
 
     public Tile[] tiles; //tile types(water tile, wall tile, ground tile, and more)
     public int mapTileNum[][][];
+    boolean drawPath = true;
     int tileNum;
     String mapFilePath;
 
@@ -116,6 +117,19 @@ public class TileManeger {
             {
                 col = 0;
                 row++;
+            }
+        }
+
+        if (drawPath){
+            g2.setColor(new Color(64, 255,0, 40));
+
+            for (int i = 0; i<gp.pFinder.pathList.size(); i++){
+                int worldX = gp.pFinder.pathList.get(i).col* gp.tileSize;
+                int worldY = gp.pFinder.pathList.get(i).row* gp.tileSize;
+                int screenX = worldX-gp.player.WorldX + gp.player.screenX;
+                int screenY = worldY-gp.player.WorldY + gp.player.screenY;
+
+                g2.fillRect(screenX,screenY,gp.tileSize,gp.tileSize);
             }
         }
     }
