@@ -46,7 +46,7 @@ public class Player extends Entity{
 //        WorldY = gp.tileSize*21;
         WorldX = gp.tileSize*26;
         WorldY = gp.tileSize*21;
-        speed = 2.5;
+        speed = 3;
         imageChangeSpeed = 8;
         direction = directions.down;
 
@@ -432,7 +432,7 @@ public class Player extends Entity{
 
                             case "boots":
                                 gp.ui.addMessage("you got "+gp.obj[gp.currentMap][i].name+"!");
-                                speed +=2;
+                                speed =4;
                                 imageChangeSpeed -= 2;
                                 gp.obj[gp.currentMap][i] = null;
                                 break;

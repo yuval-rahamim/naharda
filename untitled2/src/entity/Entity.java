@@ -493,11 +493,12 @@ public abstract class Entity {
                     direction = directions.right;
                 }
             }
-            int nextCol = gp.pFinder.pathList.get(0).col;
-            int nextRow = gp.pFinder.pathList.get(0).row;
-            if (nextCol == goalCol && nextRow == goalRow){
-                onPath =false;
-            }
+            //stop the search if reaches the goal
+//            int nextCol = gp.pFinder.pathList.get(0).col;
+//            int nextRow = gp.pFinder.pathList.get(0).row;
+//            if (nextCol == goalCol && nextRow == goalRow){
+//                onPath =false;
+//            }
         }else {
             System.out.printf("nai");
         }
