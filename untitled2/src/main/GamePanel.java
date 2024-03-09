@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public ArrayList<Entity> particleList = new ArrayList<Entity>();
     ArrayList<Entity> entityList = new ArrayList<Entity>();
-    public ArrayList<Entity> projectileList = new ArrayList<Entity>();
+    public Entity projectile [][] = new Entity[maxMap][20];
     public BufferedImage pokemon;
     double drawInterval;
     double nextDrawTime;
@@ -160,14 +160,14 @@ public class GamePanel extends JPanel implements Runnable
                     }
                 }
             }
-            for (int i =0; i<projectileList.size();i++)
+            for (int i =0; i<projectile[1].length;i++)
             {
-                if (projectileList.get(i)!=null)
+                if (projectile[currentMap][i]!=null)
                 {
-                    if (projectileList.get(i).alive) {
-                        projectileList.get(i).update();
-                    }else if(!projectileList.get(i).alive){
-                        projectileList.remove(i);
+                    if (projectile[currentMap][i].alive) {
+                        projectile[currentMap][i].update();
+                    }else{
+                        projectile[currentMap][i] = null;
                     }
                 }
             }
@@ -177,7 +177,7 @@ public class GamePanel extends JPanel implements Runnable
                 {
                     if (particleList.get(i).alive) {
                         particleList.get(i).update();
-                    }else if(!particleList.get(i).alive){
+                    }else {
                         particleList.remove(i);
                     }
                 }
@@ -234,11 +234,11 @@ public class GamePanel extends JPanel implements Runnable
                     entityList.add(monster[currentMap][i]);
                 }
             }
-            for (int i=0; i<projectileList.size();i++)
+            for (int i=0; i<projectile[1].length;i++)
             {
-                if (projectileList.get(i)!=null)
+                if (projectile[currentMap][i]!=null)
                 {
-                    entityList.add(projectileList.get(i));
+                    entityList.add(projectile[currentMap][i]);
                 }
             }
             for (int i=0; i<particleList.size();i++)

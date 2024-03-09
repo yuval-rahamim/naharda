@@ -31,20 +31,24 @@ public class NPC extends Entity{
         right2 = setup("npc/oldman_right_2",gp.tileSize,gp.tileSize);
     }
     public void setDialog(){
-        dialogues[0] = "KrisReaper \n sigma has lost his meaning :(";
-        dialogues[1] = "you are my fire!";
-        dialogues[2] = "the one desireeeeeeeee!";
-        dialogues[3] = "believe, when i say(ohhhh)!";
-        dialogues[4] = "i want it that wayyyyy!!!!!!!";
-        dialogues[5] = "tell me whahy";
-        dialogues[6] = " ";
+        dialogues[0] = "follow me!!!";
+        dialogues[1] = "KrisReaper \n sigma has lost his meaning :(";
+    }
+    public void searchPath(int goalCol, int goalRow){
+        super.searchPath(goalCol,goalRow);
+            //stop the search if reaches the goal
+        int nextCol = gp.pFinder.pathList.get(0).col;
+        int nextRow = gp.pFinder.pathList.get(0).row;
+        if (nextCol == goalCol && nextRow == goalRow){
+            onPath =false;
+        }
     }
     public void setAction()
     {
         if (onPath){
-            int goalRow = 22;
-            int goalCol = 37;
-            System.out.println("start the path");
+            int goalCol = 35;
+            int goalRow = 8;
+
             searchPath(goalCol,goalRow);
         }else {
             actionLockCounter++;
@@ -70,8 +74,9 @@ public class NPC extends Entity{
         }
     }
     public void speak() {
-        onPath = true;
+
         super.speak();
+        onPath = true;
     }
 
 }

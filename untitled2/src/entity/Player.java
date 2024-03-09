@@ -40,13 +40,14 @@ public class Player extends Entity{
         setItems();
 
     }
-    public  void setDefaultValues()
-    {
+    public  void setDefaultValues() {
 //        WorldX = gp.tileSize*23;
 //        WorldY = gp.tileSize*21;
         WorldX = gp.tileSize*26;
         WorldY = gp.tileSize*21;
-        speed = 2.5;
+
+        defaultSpeed = 3;
+        speed = defaultSpeed;
         imageChangeSpeed = 8;
         direction = directions.down;
 
@@ -88,8 +89,7 @@ public class Player extends Entity{
     }
 
 
-    public void getPlayerImage()
-    {
+    public void getPlayerImage() {
         up1 = setup("player/up-0",gp.tileSize,gp.tileSize);
         up2 = setup("player/up-1",gp.tileSize,gp.tileSize);
         up3 = setup("player/up-2",gp.tileSize,gp.tileSize);
@@ -106,8 +106,7 @@ public class Player extends Entity{
         right2 = setup("player/right1",gp.tileSize,gp.tileSize);
         right3 = setup("player/right2",gp.tileSize,gp.tileSize);
     }
-    public void getPlayerAttackImage()
-    {
+    public void getPlayerAttackImage() {
         if (currentWeapon.type == typeSword) {
             attackUp1 = setup("player/up_fight1", gp.tileSize, gp.tileSize * 2);
             attackUp2 = setup("player/up_fight2", gp.tileSize, gp.tileSize * 2);
@@ -214,7 +213,13 @@ public class Player extends Entity{
             projectile.set(WorldX,WorldY,direction,true,this);
             projectile.subResource(this);
 
-            gp.projectileList.add(projectile);
+            for (int i =0; i< gp.projectile[1].length; i++) {
+                if (gp.projectile[gp.currentMap][i]==null){
+                    gp.projectile[gp.currentMap][i] = projectile;
+                    break;
+                }
+            }
+
             shotAvailableCounter =0;
 
         } else if (gp.keyHandler.shotKeyPressed && !projectile2.alive && shotAvailableCounter == 45 && projectile2.haveResource(this))
@@ -222,7 +227,12 @@ public class Player extends Entity{
             projectile2.set(WorldX,WorldY,direction,true,this);
             projectile2.subResource(this);
 
-            gp.projectileList.add(projectile2);
+            for (int i =0; i< gp.projectile[1].length; i++) {
+                if (gp.projectile[gp.currentMap][i]==null){
+                    gp.projectile[gp.currentMap][i] = projectile2;
+                    break;
+                }
+            }
             shotAvailableCounter =0;
 
         }
@@ -251,7 +261,8 @@ public class Player extends Entity{
         WorldX = gp.tileSize*23;
         WorldY = gp.tileSize*21;
         direction = directions.down;
-    } public void restoreLifeAndMana(){
+    }
+    public void restoreLifeAndMana(){
         life = maxLife;
         mana = maxMana;
         invincible = false;
@@ -262,7 +273,7 @@ public class Player extends Entity{
         if (spriteCounter<=5)
         {
             spriteNum = 1;
-        }if (spriteCounter>5&&spriteCounter<=25)
+        }if (spriteCounter>5&&spriteCounter<=25) //שינוי של זה משנה את קושי דיוק המכה
         {
             spriteNum = 2;
 
@@ -287,11 +298,13 @@ public class Player extends Entity{
             }
 
             int monsterIndex = gp.cChecker.checkEntity(this,gp.monster);
-            damageMonster(monsterIndex,attack);
+            damageMonster(monsterIndex,attack,currentWeapon.knockBackPower);
 
             int iTileIndex = gp.cChecker.checkEntity(this,gp.iTile);
             damageInteractiveTile(iTileIndex);
 
+            int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
+            damageProjectile(projectileIndex);
             WorldX = currentWorldX;
             WorldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -302,6 +315,12 @@ public class Player extends Entity{
             spriteCounter = 0;
             attacking = false;
         }
+    }
+
+    public void knockBack(Entity entity, int knockBackPower){
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
     }
 
     public void damageInteractiveTile(int i) {
@@ -318,11 +337,23 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int i, int attack) {
+    public void damageProjectile(int i) {
+        if (i!=-1)
+        {
+            Entity projectile = gp.projectile[gp.currentMap][i];
+            projectile.alive = false;
+            generateParticle(projectile,projectile);
+        }
+    }
+
+    public void damageMonster(int i, int attack, int knockBackPower) {
         if (i!=-1)
         {
             if (!gp.monster[gp.currentMap][i].invincible)
             {
+                if (knockBackPower>0) {
+                    knockBack(gp.monster[gp.currentMap][i],knockBackPower);
+                }
                 int damage = attack - gp.monster[gp.currentMap][i].defense;
                 if (damage<0)
                 {
@@ -413,8 +444,6 @@ public class Player extends Entity{
 
 
     public void pickUpObject(int i){
-
-
         if (i!=-1)
         {
             String objectName = gp.obj[gp.currentMap][i].name;
@@ -432,7 +461,8 @@ public class Player extends Entity{
 
                             case "boots":
                                 gp.ui.addMessage("you got "+gp.obj[gp.currentMap][i].name+"!");
-                                speed +=2;
+                                defaultSpeed = 4;
+                                speed =defaultSpeed;
                                 imageChangeSpeed -= 2;
                                 gp.obj[gp.currentMap][i] = null;
                                 break;
@@ -488,15 +518,14 @@ public class Player extends Entity{
                     if (!gp.obj[gp.currentMap][i].shining && (keyHandler.rightPressed||keyHandler.leftPressed|| keyHandler.downPressed|| keyHandler.upPressed))
                     {
                         shin = new Random().nextInt(100000)+1;
-                        if (shin >= 99000)
+                        if (shin > 99990)
                             gp.obj[gp.currentMap][i].shining = true;
                     }
             }
         }
 
     }
-    public void draw(Graphics2D g2)
-    {
+    public void draw(Graphics2D g2) {
         BufferedImage image = null;
         int temScreenX = screenX;
         int temScreenY = screenY;

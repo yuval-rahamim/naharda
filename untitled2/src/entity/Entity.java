@@ -33,12 +33,15 @@ public abstract class Entity {
     public Entity currentShield;
     public Projectile projectile;
     public Projectile projectile2;
+    public int defaultSpeed;
 
     public int value;
     public int attackValue;
     public int defenseValue;
     public int useCost;
+    public int knockBackPower = 0;
 
+    public boolean knockBack = false;
     public boolean invincible = false;
     public boolean attacking = false;
     public boolean alive = true;
@@ -47,6 +50,7 @@ public abstract class Entity {
     public int invincibleCounter = 0;
     public int dyingCounter = 0;
     int hpBarCounter = 0;
+    int knockBackCounter = 0;
 
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
@@ -68,7 +72,7 @@ public abstract class Entity {
     public int spriteCounter = 0;
     public int spriteNum =1;
 
-    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle solidArea = new Rectangle(0,0,40,40);
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX,solidAreaDefaultY;
     public boolean collisionOn = false;
@@ -176,25 +180,51 @@ public abstract class Entity {
     }
     public void update()
     {
-        setAction();
-        checkCollision();
-        if (!collisionOn)
-        {
-            switch (direction)
-            {
-                case up:
-                    WorldY -= speed;
-                    break;
-                case down:
-                    WorldY += speed;
-                    break;
-                case left:
-                    WorldX -= speed;
-                    break;
-                case right:
-                    WorldX += speed;
-                    break;
+        if (knockBack) {
+            checkCollision();
 
+            knockBackCounter++;
+            if (collisionOn || knockBackCounter == 10){
+                knockBackCounter =0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }else{
+                switch (gp.player.direction){
+                    case up:
+                        WorldY -= speed;
+                        break;
+                    case down:
+                        WorldY += speed;
+                        break;
+                    case left:
+                        WorldX -= speed;
+                        break;
+                    case right:
+                        WorldX += speed;
+                        break;
+                }
+            }
+        }else {
+            setAction();
+            checkCollision();
+
+            if (!collisionOn)
+            {
+                switch (direction)
+                {
+                    case up:
+                        WorldY -= speed;
+                        break;
+                    case down:
+                        WorldY += speed;
+                        break;
+                    case left:
+                        WorldX -= speed;
+                        break;
+                    case right:
+                        WorldX += speed;
+                        break;
+                }
             }
         }
 
@@ -452,58 +482,49 @@ public abstract class Entity {
             int nextX = gp.pFinder.pathList.get(0).col*gp.tileSize;
             int nextY = gp.pFinder.pathList.get(0).row*gp.tileSize;
 
-            int leftX = WorldX + solidArea.x;
-            int rightX = WorldX + solidArea.x+solidArea.width;
-            int topY = WorldY + solidArea.y;
-            int bottomY = WorldY + solidArea.y+solidArea.height;
+            int enLeftX = WorldX + solidArea.x;
+            int enRightX = enLeftX+45; // solidArea.width אם אני רוצה שלכל דמות יהיה תזוזה יחודית אז
+            int enTopY = WorldY + solidArea.y;
+            int enBottomY = enTopY+45;// solidArea.height אם אני רוצה שלכל דמות יהיה תזוזה יחודית אז
 
-            if (topY > nextY && leftX >= nextX && rightX<nextX + gp.tileSize){
+            if (enTopY > nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.up;
-            }else if (topY < nextY && leftX >= nextX && rightX<nextX + gp.tileSize){
+            }else if (enTopY < nextY && enLeftX >= nextX && enRightX<nextX + gp.tileSize){
                 direction = directions.down;
-            } else if (topY >= nextY &&bottomY<nextY+gp.tileSize){
-                if (leftX > nextX ){
+            } else if (enTopY >= nextY && enBottomY < nextY+gp.tileSize){
+                if (enLeftX > nextX ){
                     direction = directions.left;
                 }
-                else if (leftX < nextX ){
+                if (enLeftX < nextX ){
                     direction = directions.right;
                 }
-            } else if (topY > nextY && leftX > nextX) {
-                checkCollision();
-                if (collisionOn){
-                    direction = directions.left;
-                }else{
-                    direction = directions.up;
-                }
-            }else if (topY > nextY && leftX < nextX) {
-                checkCollision();
-                if (collisionOn){
-                    direction = directions.right;
-                }else{
-                    direction = directions.up;
-                }
-            }else if (topY < nextY && leftX > nextX) {
+            } else if (enTopY > nextY && enLeftX > nextX) {
+                direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.left;
-                }else{
-                    direction = directions.down;
                 }
-            }else if (topY < nextY && leftX < nextX) {
+            }else if (enTopY > nextY && enLeftX < nextX) {
+                direction = directions.up;
                 checkCollision();
                 if (collisionOn){
                     direction = directions.right;
-                }else{
-                    direction = directions.down;
                 }
-            }
-            int nextCol = gp.pFinder.pathList.get(0).col;
-            int nextRow = gp.pFinder.pathList.get(0).row;
-            if (nextCol == goalCol && nextRow == goalRow){
-                onPath =false;
+            }else if (enTopY < nextY && enLeftX > nextX) {
+                direction = directions.down;
+                checkCollision();
+                if (collisionOn){
+                    direction = directions.left;
+                }
+            }else if (enTopY < nextY && enLeftX < nextX) {
+                direction = directions.down;
+                checkCollision();
+                if (collisionOn){
+                    direction = directions.right;
+                }
             }
         }else {
-            System.out.println("nai");
+//            System.out.printf("there is no way");
         }
     }
 }
