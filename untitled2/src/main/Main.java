@@ -8,7 +8,7 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
 
-        window.setTitle("the poem of naharda");
+        window.setTitle("The POEM of NAHARDA");
 
         GamePanel gamePanel = new GamePanel();
         window.setIconImage(gamePanel.player.down1);

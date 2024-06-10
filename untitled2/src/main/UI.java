@@ -403,15 +403,15 @@ public class UI {
         g2.setColor(new Color(175, 111, 111));
         g2.drawImage(backgroundImage,0,0,gp.screenWidth,gp.screenHeight,null);
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-        String text = "the poem of Naharda";
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+        String text = "The POEM of NAHARDA";
         int x = getXCenter(text);
         int y = gp.tileSize*4;
 
         g2.setColor(Color.DARK_GRAY);
         g2.drawString(text,x+5,y+5);
 
-        g2.setColor(Color.white);
+            g2.setColor(new Color(255, 19, 19));
         g2.drawString(text,x,y);
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD,40F));
