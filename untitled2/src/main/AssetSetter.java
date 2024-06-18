@@ -143,7 +143,7 @@ public class AssetSetter {
     public void setMonster(){
         int i = 0;
         gp.monster[mapNum][i] = new MON_Slime(gp);
-        gp.monster[mapNum][i].WorldX = gp.tileSize*22;
+        gp.monster[mapNum][i].WorldX = gp.tileSize*35;
         gp.monster[mapNum][i].WorldY = gp.tileSize*20;
         i++;
         gp.monster[mapNum][i] = new MON_Slime(gp);
@@ -174,7 +174,6 @@ public class AssetSetter {
         gp.monster[mapNum][i].WorldX = gp.tileSize*22;
         gp.monster[mapNum][i].WorldY = gp.tileSize*38;
         i++;
-
         gp.monster[mapNum][i] = new MON_Slime(gp);
         gp.monster[mapNum][i].WorldX = gp.tileSize*8;
         gp.monster[mapNum][i].WorldY = gp.tileSize*33;
